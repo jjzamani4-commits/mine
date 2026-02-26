@@ -21,6 +21,20 @@ body {
     z-index: 1000;
 }
 
+/* THE GLOWING MOON */
+#moon {
+    position: absolute;
+    top: 80px;
+    left: 100px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #fff8dc, #d4af37);
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(255, 215, 0, 0.2);
+    z-index: 2;
+    transition: opacity 0.5s ease;
+}
+
 #login {
     position: absolute;
     top: 50%;
@@ -58,25 +72,19 @@ body {
 
 .hidden { display: none !important; }
 
-/* MOON IS BACK */
-#moon {
-    position: absolute;
-    top: 80px;
-    left: 100px;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, #fff8dc, #d4af37);
-    border-radius: 50%;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
-    z-index: 2;
+/* SKY SETTINGS */
+#sky {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
 }
 
 #compliments {
     position: relative;
-    z-index: 3;
+    z-index: 10;
     width: 90%;
     max-width: 500px;
-    margin: 150px auto 10px auto;
+    margin: 220px auto 10px auto; /* Lowered so it doesn't cover moon */
     text-align: center;
     max-height: 45vh;
     overflow-y: auto;
@@ -86,13 +94,14 @@ body {
     margin: 20px 0;
     font-size: 1.2rem;
     color: #fff8dc;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
     animation: fadeIn 0.8s ease forwards;
 }
 
-#continueWrap { text-align: center; margin-top: 20px; position: relative; z-index: 10; }
+#continueWrap { text-align: center; margin-top: 20px; position: relative; z-index: 20; }
 #continueBtn { padding: 12px 30px; border: 1px solid gold; background: transparent; color: gold; border-radius: 6px; cursor: pointer; }
 
-/* TRANSPARENT LETTER BOX WITH GOLD OUTLINE */
+/* THE LETTER BOX */
 #letter {
     position: fixed;
     inset: 0;
@@ -120,6 +129,7 @@ body {
     color: #fff8dc;
 }
 
+/* STARS */
 .star { position: absolute; width: 2px; height: 2px; background: gold; border-radius: 50%; z-index: 1; }
 
 @keyframes fall {
