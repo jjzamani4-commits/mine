@@ -1,67 +1,79 @@
-/* ... Keep your existing * and body styles ... */
+/* ... Keep your existing variable declarations ... */
 
-#moon {
-    position: absolute;
-    top: 60px;
-    left: 60px;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, #fff8dc, #d4af37);
-    border-radius: 50%;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 215, 0, 0.4);
-    z-index: 10; /* This ensures it stays visible on all pages */
+function setLamp(on) {
+    is0n = !!on;
+    lamp.classList.toggle('on', is0n);
+    document.body.classList.toggle('lit', is0n);
+    
+    if (is0n) {
+        // MOON & SKY SHOW IMMEDIATELY REGARDLESS OF LOGIN
+        sky.classList.remove('hidden');
+        moon.classList.remove('hidden'); 
+        createStars(100); 
+        document.body.style.background = "radial-gradient(circle at 80% 20%, #1a1a1a, #000)";
+        
+        if (!loggedIn) {
+            login.classList.remove('hidden');
+        } else if (!main.classList.contains('hidden')) {
+            startCompliments();
+        }
+    } else {
+        [sky, moon, login, main, letterSection].forEach(el => el.classList.add('hidden'));
+        document.body.style.background = "black";
+        if (complimentsInterval) clearInterval(complimentsInterval);
+    }
 }
 
-/* SCROLLABLE COMPLIMENTS AREA */
-#compliments {
-    position: relative;
-    z-index: 3;
-    width: 90%;
-    max-width: 800px;
-    margin: 150px auto 20px auto;
-    text-align: center;
-    max-height: 40vh; 
-    overflow-y: auto;
-    scrollbar-width: none; 
-}
-#compliments::-webkit-scrollbar { display: none; }
-
-/* AESTHETIC GOLD OUTLINE LETTER BOX */
-#letterBox { 
-    width: 85%; 
-    max-width: 600px; 
-    background: rgba(0,0,0,0.5); 
-    backdrop-filter: blur(10px); 
-    border: 2px solid gold; /* The gold outline you requested */
-    padding: 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+// COMPLIMENTS NOW APPEAR IN ORDER (1-10)
+function startCompliments() {
+    complimentsWrap.innerHTML = '';
+    let currentIndex = 0;
+    
+    complimentsInterval = setInterval(() => {
+        if (currentIndex < complimentsList.length) {
+            const el = document.createElement('div');
+            el.className = 'compliment reveal';
+            el.textContent = complimentsList[currentIndex];
+            complimentsWrap.appendChild(el);
+            currentIndex++;
+            complimentsWrap.scrollTo({ top: complimentsWrap.scrollHeight, behavior: 'smooth' });
+        } else {
+            clearInterval(complimentsInterval);
+            continueWrap.classList.remove('hidden');
+        }
+    }, 2500);
 }
 
-#letterContent { 
-    white-space: pre-wrap; 
-    font-size: 1.1rem; 
-    line-height: 1.6; 
-    color: #fff8dc; 
-    max-height: 50vh; 
-    overflow-y: auto; /* Makes the letter scrollable */
+// TYPERWRITER + SPARKLES AT THE END
+function startTypingLetter() {
+    letterContent.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+        letterContent.textContent += letterText.charAt(i);
+        i++;
+        letterContent.scrollTo({ top: letterContent.scrollHeight });
+        if (i >= letterText.length) {
+            clearInterval(timer);
+            createFinalSparkles(120); // Triggers the glowing stuff
+        }
+    }, 50);
 }
 
-/* FINAL GLOWING SPARKLES */
-.sparkle-final {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: gold;
-    border-radius: 50%;
-    z-index: 9999;
-    pointer-events: none;
-    box-shadow: 0 0 10px gold;
-    animation: sparkleAnim 2s ease-out forwards;
+function createFinalSparkles(count) {
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const s = document.createElement('div');
+            s.className = 'sparkle-final';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 2000);
+        }, i * 20);
+    }
 }
 
-@keyframes sparkleAnim {
-    0% { transform: scale(0); opacity: 0; }
-    50% { opacity: 1; transform: scale(1.2); }
-    100% { transform: scale(0); opacity: 0; }
-}
+/* ... Keep your login event listener and credential variables ... */
+
+// INITIAL STATE
+[login, sky, moon, main, letterSection].forEach(el => el.classList.add('hidden'));
+setLamp(false);
