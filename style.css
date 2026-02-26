@@ -90,7 +90,7 @@ body {
 #continueWrap { text-align: center; margin-top: 20px; }
 #continueBtn { padding: 12px 30px; border: 1px solid gold; background: transparent; color: gold; border-radius: 6px; cursor: pointer; }
 
-/* TRANSPARENT LETTER BOX WITH GOLD OUTLINE */
+/* THE TRANSPARENT LETTER AREA */
 #letter {
     position: fixed;
     inset: 0;
@@ -98,17 +98,19 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 100;
+    /* REMOVED background-color: black so stars show through */
 }
 
 #letterBox {
     width: 90%;
     max-width: 500px;
-    background: rgba(255, 215, 0, 0.05); /* Very light gold tint */
-    backdrop-filter: blur(5px); /* Blurs background stars slightly */
-    border: 2px solid gold; /* The gold outline */
+    /* This makes it transparent but adds a slight glass blur */
+    background: rgba(0, 0, 0, 0.3); 
+    backdrop-filter: blur(8px); 
+    border: 2px solid gold; /* The gold outline you want */
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
 }
 
 #letterContent {
