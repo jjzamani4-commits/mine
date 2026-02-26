@@ -16,15 +16,30 @@ let is0n = false;
 let loggedIn = false;
 let complimentsInterval = null;
 
-function createStars(count = 80) {
+// Generate the Aesthetic Background
+function createAtmosphere() {
     sky.innerHTML = '';
-    for (let i = 0; i < count; i++) {
+    // Create raining stars
+    for (let i = 0; i < 100; i++) {
         const s = document.createElement('div');
         s.className = 'star';
+        const size = Math.random() * 3 + 'px';
+        s.style.width = size;
+        s.style.height = size;
         s.style.left = Math.random() * 100 + 'vw';
         s.style.top = -10 + 'vh';
-        s.style.animation = `fall ${4 + Math.random() * 6}s linear ${Math.random() * -20}s infinite`;
+        s.style.backgroundColor = i % 2 === 0 ? "gold" : "white";
+        s.style.animation = `fall ${5 + Math.random() * 5}s linear ${Math.random() * -10}s infinite`;
         sky.appendChild(s);
+    }
+    // Create twinkling background sparkles
+    for (let j = 0; j < 50; j++) {
+        const sp = document.createElement('div');
+        sp.className = 'sparkle-bg';
+        sp.style.left = Math.random() * 100 + 'vw';
+        sp.style.top = Math.random() * 100 + 'vh';
+        sp.style.animationDelay = Math.random() * 5 + 's';
+        sky.appendChild(sp);
     }
 }
 
@@ -34,11 +49,10 @@ function setLamp(on) {
     document.body.classList.toggle('lit', is0n);
     
     if (is0n) {
-        // MOON SHOWS IMMEDIATELY ON LAMP ON
         sky.classList.remove('hidden');
         moon.classList.remove('hidden');
-        createStars(80);
-        document.body.style.background = "radial-gradient(circle at 80% 20%, #222, #000)";
+        createAtmosphere();
+        document.body.style.background = "radial-gradient(circle at 80% 20%, #1a1a1a, #000)";
         
         if (!loggedIn) {
             login.classList.remove('hidden');
@@ -46,14 +60,9 @@ function setLamp(on) {
             startCompliments();
         }
     } else {
-        sky.classList.add('hidden');
-        moon.classList.add('hidden');
-        login.classList.add('hidden');
+        [sky, moon, login, main, letterSection].forEach(el => el.classList.add('hidden'));
         document.body.style.background = "black";
-        if (complimentsInterval) {
-            clearInterval(complimentsInterval);
-            complimentsInterval = null;
-        }
+        if (complimentsInterval) clearInterval(complimentsInterval);
     }
 }
 
@@ -66,7 +75,7 @@ loginButton.addEventListener('click', () => {
         main.classList.remove('hidden');
         startCompliments();
     } else {
-        login.animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'}], {duration:100, iterations:3});
+        login.animate([{transform:'translateX(-10px)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}], {duration:200, iterations:2});
     }
 });
 
@@ -83,7 +92,6 @@ const complimentsList = [
 
 function startCompliments() {
     complimentsWrap.innerHTML = '';
-    continueWrap.classList.add('hidden');
     let currentIndex = 0;
     const showNext = () => {
         if (currentIndex < complimentsList.length) {
@@ -98,7 +106,7 @@ function startCompliments() {
         }
     };
     showNext();
-    complimentsInterval = setInterval(showNext, 2500);
+    complimentsInterval = setInterval(showNext, 3000);
 }
 
 continueBtn.addEventListener('click', () => {
@@ -107,30 +115,35 @@ continueBtn.addEventListener('click', () => {
     startTypingLetter();
 });
 
-const letterText = `Hey mama,\n\nEvery time I think of you, my heart hums the sweetest tune. You're my morning light and my midnight star 💫.\n\nIn the quiet when the world slows down and everything fades into silence, you are the thought that stays\n\nI didn't plan to feel this way untill you arrived gently and somehow became everything\n\nYour smile feels like light after a long night,\n\nEven your on days when words fail me, my heart still speaks your namen\n\nIf love is patience, I'm learning it with you\n\nIf love is kindness, I see it in you and\n\nIf love is home... then that's where you are.\n\nNo matter where life takes us,\n\nKnow this, I choose you, in both calm and stormy days.\n\nForever yours,\nYour adoring partner ❤️😘`;
-
 function startTypingLetter() {
+    const letterText = `Hey mama,\n\nEvery time I think of you, my heart hums the sweetest tune. You're my morning light and my midnight star 💫.\n\nIn the quiet when the world slows down and everything fades into silence, you are the thought that stays.\n\nI didn't plan to feel this way until you arrived gently and somehow became everything.\n\nYour smile feels like light after a long night.\n\nEven on days when words fail me, my heart still speaks your name.\n\nIf love is patience, I'm learning it with you.\n\nIf love is kindness, I see it in you.\n\nIf love is home... then that's where you are.\n\nNo matter where life takes us, I choose you, in both calm and stormy days.\n\nForever yours,\nYour adoring partner ❤️😘`;
+    
     letterContent.textContent = '';
     let i = 0;
     const timer = setInterval(() => {
         letterContent.textContent += letterText.charAt(i++);
+        letterContent.scrollTo({ top: letterContent.scrollHeight });
         if (i >= letterText.length) {
             clearInterval(timer);
-            createSparkles(100); // SPARKLES TRIGGER HERE
+            createEndSparkles(100); 
         }
-    }, 40);
+    }, 50);
 }
 
-function createSparkles(count) {
+function createEndSparkles(count) {
     for (let i = 0; i < count; i++) {
         setTimeout(() => {
             const s = document.createElement('div');
-            s.className = 'sparkle';
-            s.style.left = Math.random() * window.innerWidth + 'px';
-            s.style.top = Math.random() * window.innerHeight + 'px';
+            s.className = 'sparkle-bg'; // Using the twinkling style
+            s.style.position = 'fixed';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            s.style.zIndex = '1000';
+            s.style.width = '4px';
+            s.style.height = '4px';
             document.body.appendChild(s);
-            setTimeout(() => s.remove(), 1500);
-        }, i * 20);
+            setTimeout(() => s.remove(), 2000);
+        }, i * 30);
     }
 }
 
