@@ -16,9 +16,8 @@ let is0n = false;
 let loggedIn = false;
 let complimentsInterval = null;
 
-// Create raining stars
 function createStars(count = 80) {
-    sky.innerHTML = ''; 
+    sky.innerHTML = '';
     for (let i = 0; i < count; i++) {
         const s = document.createElement('div');
         s.className = 'star';
@@ -29,56 +28,45 @@ function createStars(count = 80) {
     }
 }
 
-// LAMP TOGGLE: This controls the Moon, Stars, and Background Glow
-lamp.addEventListener('click', () => {
-    is0n = !is0n;
+function setLamp(on) {
+    is0n = !!on;
+    lamp.classList.toggle('on', is0n);
+    document.body.classList.toggle('lit', is0n);
     
     if (is0n) {
-        lamp.textContent = '💡';
-        document.body.classList.add('lit');
+        // MOON SHOWS IMMEDIATELY ON LAMP ON
+        sky.classList.remove('hidden');
+        moon.classList.remove('hidden');
+        createStars(80);
         document.body.style.background = "radial-gradient(circle at 80% 20%, #222, #000)";
         
-        // SHOW THE MOON AND STARS IMMEDIATELY ON TOGGLE
-        sky.classList.remove('hidden'); 
-        moon.classList.remove('hidden'); 
-        createStars(80);
-
-        // Only show login if they haven't logged in yet
         if (!loggedIn) {
             login.classList.remove('hidden');
-        } else if (letterSection.classList.contains('hidden')) {
-            main.classList.remove('hidden');
+        } else if (!main.classList.contains('hidden') && !complimentsInterval) {
+            startCompliments();
         }
     } else {
-        // HIDE EVERYTHING ON OFF
-        lamp.textContent = '🌑';
-        document.body.classList.remove('lit');
-        document.body.style.background = "black";
-        
         sky.classList.add('hidden');
         moon.classList.add('hidden');
         login.classList.add('hidden');
-        main.classList.add('hidden');
+        document.body.style.background = "black";
+        if (complimentsInterval) {
+            clearInterval(complimentsInterval);
+            complimentsInterval = null;
+        }
     }
-});
+}
 
-// LOGIN LOGIC
+lamp.addEventListener('click', () => setLamp(!is0n));
+
 loginButton.addEventListener('click', () => {
-    const user = (usernameInput.value || '').trim();
-    const pass = (passwordInput.value || '').trim();
-    
-    if (user === 'i love you' && pass === 'for_life') {
+    if (usernameInput.value.trim() === 'i love you' && passwordInput.value.trim() === 'for_life') {
         loggedIn = true;
         login.classList.add('hidden');
         main.classList.remove('hidden');
         startCompliments();
     } else {
-        login.animate([
-            { transform: 'translate(-50%, -50%)' },
-            { transform: 'translate(-48%, -50%)' },
-            { transform: 'translate(-52%, -50%)' },
-            { transform: 'translate(-50%, -50%)' }
-        ], { duration: 300 });
+        login.animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'}], {duration:100, iterations:3});
     }
 });
 
@@ -97,7 +85,6 @@ function startCompliments() {
     complimentsWrap.innerHTML = '';
     continueWrap.classList.add('hidden');
     let currentIndex = 0;
-
     const showNext = () => {
         if (currentIndex < complimentsList.length) {
             const el = document.createElement('div');
@@ -107,11 +94,9 @@ function startCompliments() {
             complimentsWrap.scrollTo({ top: complimentsWrap.scrollHeight, behavior: 'smooth' });
         } else {
             clearInterval(complimentsInterval);
-            complimentsInterval = null;
             continueWrap.classList.remove('hidden');
         }
     };
-
     showNext();
     complimentsInterval = setInterval(showNext, 2500);
 }
@@ -131,7 +116,7 @@ function startTypingLetter() {
         letterContent.textContent += letterText.charAt(i++);
         if (i >= letterText.length) {
             clearInterval(timer);
-            createSparkles(100); 
+            createSparkles(100); // SPARKLES TRIGGER HERE
         }
     }, 40);
 }
@@ -149,5 +134,4 @@ function createSparkles(count) {
     }
 }
 
-// Initial State
-[login, sky, moon, main, letterSection].forEach(el => el.classList.add('hidden'));
+setLamp(false);
