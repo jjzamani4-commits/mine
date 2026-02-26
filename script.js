@@ -120,8 +120,6 @@ loginButton.addEventListener('click', () => {
 const complimentsList = [
     "Hey babe, I want to use this opportunity to tell you that you light up my world ✨.",
     "🌅 Your smile is my favorite sunrise.",
-    "🪄 Every moment with you is magic.",
-    "🎵 Your laugh is my favorite song.",
     "💝 I'm grateful for your gentle heart.",
     "🌟 You make ordinary days extraordinary.",
     "😍 I adore everything about you.",
@@ -212,6 +210,7 @@ moon.classList.add('hidden');
 main.classList.add('hidden');
 letterSection.classList.add('hidden');
 setLamp(false);
+
 
 
 
