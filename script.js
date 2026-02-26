@@ -136,26 +136,33 @@ function startCompliments(durationSeconds = 20) {
     let elapsed = 0;
     const intervalMs = 2500;
     
-    // This shuffles the list so it never repeats until the end
-    let shuffledList = [...complimentsList].sort(() => Math.random() - 0.5);
+    // This keeps track of which number we are on (starting at 0)
+    let currentIndex = 0; 
     
     const showNext = () => {
-        if (shuffledList.length > 0) {
-            const text = shuffledList.shift(); 
+        // Only show a compliment if we haven't reached the end of the list
+        if (currentIndex < complimentsList.length) {
+            const text = complimentsList[currentIndex]; 
             const el = document.createElement('div');
             el.className = 'compliment reveal';
             el.textContent = text;
             complimentsWrap.appendChild(el);
             complimentScroll();
+            
+            // Move to the next number for next time
+            currentIndex++; 
         }
     };
 
+    // Show the first one immediately
     showNext();
     
     complimentsInterval = setInterval(() => {
         showNext();
         elapsed += intervalMs / 1000;
-        if (elapsed >= durationSeconds) {
+        
+        // Stop if time is up OR if we ran out of compliments
+        if (elapsed >= durationSeconds || currentIndex >= complimentsList.length) {
             clearInterval(complimentsInterval);
             complimentsInterval = null;
             continueWrap.classList.remove('hidden');
@@ -202,6 +209,7 @@ moon.classList.add('hidden');
 main.classList.add('hidden');
 letterSection.classList.add('hidden');
 setLamp(false);
+
 
 
 
