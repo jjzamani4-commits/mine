@@ -143,26 +143,30 @@ body.lit .reveal {
 #compliments {
     position: relative;
     z-index: 3;
-    width: 90%;
-    max-width: 800px;
-    margin: 80px auto 40px auto;
+    width: 95%;
+    max-width: 500px;      /* Narrower for better mobile reading */
+    margin: 60px auto 20px auto;
     text-align: center;
+    
+    /* NEW SCROLL SETTINGS */
+    max-height: 50vh;      /* Limits height to 50% of the screen */
+    overflow-y: auto;      /* Adds a scrollbar if text is too long */
+    padding: 10px;
+    scrollbar-width: thin; /* Makes scrollbar less ugly on some browsers */
 }
 
 .compliment {
-    margin: 10px 0;
-    font-size: 1.1rem;      /* Reduced from 1.6rem to fit better */
+    margin: 15px 0;
+    font-size: 1.3rem;     /* Slightly bigger since we can scroll now */
     color: #fff8dc;
-    padding: 0 15px;       /* Adds space on the left/right so text doesn't touch the screen edge */
-    word-wrap: break-word; /* Ensures long words don't break the layout */
-    line-height: 1.4;      /* Gives the text a bit of breathing room */
+    line-height: 1.5;
+    /* This adds a nice fade-in effect */
+    animation: fadeIn 0.8s ease forwards;
 }
 
-/* This part makes it even smaller specifically for very small phones */
-@media (max-width: 400px) {
-    .compliment {
-        font-size: 0.95rem;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 #continueWrap { text-align: center; margin-top: 20px; z-index: 10; pointer-events: auto; position: relative; }
@@ -189,5 +193,6 @@ body.lit .reveal {
     100% { transform: translateY(120vh) translateX(30px) scale(1); opacity: 0; }
 
 }
+
 
 
