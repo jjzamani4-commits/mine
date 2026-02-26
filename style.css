@@ -150,9 +150,19 @@ body.lit .reveal {
 }
 
 .compliment {
-    margin: 8px 0;
-    font-size: 1.6rem;
+    margin: 10px 0;
+    font-size: 1.1rem;      /* Reduced from 1.6rem to fit better */
     color: #fff8dc;
+    padding: 0 15px;       /* Adds space on the left/right so text doesn't touch the screen edge */
+    word-wrap: break-word; /* Ensures long words don't break the layout */
+    line-height: 1.4;      /* Gives the text a bit of breathing room */
+}
+
+/* This part makes it even smaller specifically for very small phones */
+@media (max-width: 400px) {
+    .compliment {
+        font-size: 0.95rem;
+    }
 }
 
 #continueWrap { text-align: center; margin-top: 20px; z-index: 10; pointer-events: auto; position: relative; }
@@ -179,4 +189,5 @@ body.lit .reveal {
     100% { transform: translateY(120vh) translateX(30px) scale(1); opacity: 0; }
 
 }
+
 
